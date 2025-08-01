@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import '../CustomWidgets/CustomMenuButton.dart';
+import '../Providers/Providers.dart';
+import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SkillsSection extends StatefulWidget
+
+class SkillsSection extends ConsumerStatefulWidget
 {
-  State<SkillsSection> createState()=>SkillsSectionState();
+  ConsumerState<SkillsSection> createState()=>SkillsSectionState();
 }
-class SkillsSectionState extends State<SkillsSection>
+class SkillsSectionState extends ConsumerState<SkillsSection>
     with TickerProviderStateMixin
 {
 
@@ -43,26 +47,18 @@ class SkillsSectionState extends State<SkillsSection>
 
   ];
 
-  List<bool> isHovered=List.filled(6, false);
   late AnimationController _controller;
-
-  bool isGridVisible=false;
 
   @override
   void initState() {
     _controller=AnimationController(vsync: this,duration: Duration(milliseconds: 700));
-
     // TODO: implement initState
-
-
     super.initState();
   }
   @override
   void dispose() {
     _controller.dispose();
-
     // TODO: implement dispose
-
   }
   @override
   Widget build(BuildContext context) {
@@ -103,57 +99,73 @@ class SkillsSectionState extends State<SkillsSection>
                     return  MouseRegion(
                       onEnter: (b){
                         _controller.forward();
-                        setState(() {
-                        isHovered[index]=true;
-                      });},
+                        ref.read(skillContainerHoverProvider.notifier).state[index]=true;
+                        ref.read(skillContainerHoverProvider.notifier).state=ref.read(skillContainerHoverProvider.notifier).state.toList();
+                       },
                       onExit: (b){
                         _controller.reverse();
-                        setState(() {
-                        isHovered[index]=false;
-                      });},
-                      child: ScaleTransition(
-                        scale:isHovered[index]?Tween<double>(begin: 1,end: 1.03).chain(CurveTween(curve: Curves.bounceInOut)).animate(_controller)
-                        :Tween<double>(begin: 1,end: 1).chain(CurveTween(curve: Curves.bounceInOut)).animate(_controller),
-                        child: AnimatedContainer(
-                                                   //   clipBehavior: Clip.antiAlias,
-                          duration: Duration(milliseconds: 700),
-                          curve: Curves.easeInOut,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  height:80,
-                                  width: 80,
-                                  child: FittedBox(
-                                      child: Image.asset(list[index]['icon']!,),
-                                    fit: BoxFit.cover,
-                                  ),
+                        ref.read(skillContainerHoverProvider.notifier).state[index]=false;
+                        ref.read(skillContainerHoverProvider.notifier).state=ref.read(skillContainerHoverProvider.notifier).state.toList();
+                       },
+                      child: Consumer(
+                        builder: (context,ref,child) {
+                          final hover=ref.watch(skillContainerHoverProvider);
+                          return ScaleTransition(
+                            scale: hover[index] ? Tween<double>(
+                                begin: 1, end: 1.03).chain(
+                                CurveTween(curve: Curves.bounceInOut)).animate(
+                                _controller)
+                                : Tween<double>(begin: 1, end: 1).chain(
+                                CurveTween(curve: Curves.bounceInOut)).animate(
+                                _controller),
+                            child: AnimatedContainer(
+                              //   clipBehavior: Clip.antiAlias,
+                              duration: Duration(milliseconds: 700),
+                              curve: Curves.easeInOut,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      height: 80,
+                                      width: 80,
+                                      child: FittedBox(
+                                        child: Image.asset(
+                                          list[index]['icon']!,),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Text(
+                                      list[index]['title']!,
+                                      style: TextStyle(color: Colors.white54,
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    Text(
+                                      list[index]['subtitle']!,
+                                      style: TextStyle(
+                                        color: Colors.white54, fontSize: 20,),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  list[index]['title']!,
-                                  style: TextStyle(color: Colors.white54,fontSize: 30,fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  list[index]['subtitle']!,
-                                  style: TextStyle(color: Colors.white54,fontSize: 20,),
-                                ),
-                              ],
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Colors.black12,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [BoxShadow(
+                                      color: hover[index] ? Colors
+                                          .tealAccent : Colors.white54,
+                                      blurRadius: hover[index] ? 5 : 1,
+                                      blurStyle: BlurStyle.outer
+                                  )
+                                  ]
+                              ),
                             ),
-                          ),
-                          decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [BoxShadow(
-                                color: isHovered[index] ? Colors.tealAccent : Colors.white54,
-                                blurRadius: isHovered[index]?5:1,
-                                blurStyle: BlurStyle.outer
-                              )
-                              ]
-                          ),
-                        ),
+                          );
+                        }
                       ),
                     );
                   }

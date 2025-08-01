@@ -2,12 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../Providers/Providers.dart';
 
-class SocialIconButtons extends StatefulWidget
+class SocialIconButtons extends ConsumerStatefulWidget
 {
-  State<SocialIconButtons> createState()=>SocialIconButtonsState();
+  ConsumerState<SocialIconButtons> createState()=>SocialIconButtonsState();
 }
-class SocialIconButtonsState extends State<SocialIconButtons>
+class SocialIconButtonsState extends ConsumerState<SocialIconButtons>
     with SingleTickerProviderStateMixin
 {
   Future<void> _launchURL(String url) async {
@@ -36,64 +39,56 @@ class SocialIconButtonsState extends State<SocialIconButtons>
     {
       'icon': FaIcon(FontAwesomeIcons.linkedin),
       'url' :'https://www.linkedin.com/in/umar-gulzar-968504336/',
-      'hover':false,
       'toolTip':'Linkedin'
     },
     {
       'icon': FaIcon(FontAwesomeIcons.github),
       'url' :'https://github.com/Umar-Gulzar',
-      'hover':false,
       'toolTip':'GitHub'
     },
     {
       'icon': FaIcon(FontAwesomeIcons.facebook),
       'url' :'https://web.facebook.com/umar.arain.5268750',
-      'hover':false,
       'toolTip':'Facebook'
     },
     {
       'icon': FaIcon(FontAwesomeIcons.instagram),
       'url' :'',
-      'hover':false,
       'toolTip':'Instagram'
     },
 
   ];
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
+    final hover=ref.watch(hoverProvider);
     return   Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         for(int index=0;index<4;index++)
         ScaleTransition(
-          scale:socialButtonsData[index]['hover']?
+          scale:hover[index]?
           Tween<double>(begin: 1,end: 1.2).chain(CurveTween(curve: Curves.easeInOut)).animate(_controller):
           Tween<double>(begin: 1,end: 1).chain(CurveTween(curve: Curves.easeInOut)).animate(_controller),
           child: MouseRegion(
             onEnter: (b){
               _controller.forward();
-              setState(() {
-                socialButtonsData[index]['hover']=true;
-              });
+              ref.read(hoverProvider.notifier).state[index]=true;
+             ref.read(hoverProvider.notifier).state=[...ref.read(hoverProvider.notifier).state];
+
             },
             onExit: (b){
               _controller.reverse();
-              setState(() {
-                socialButtonsData[index]['hover']=false;
-              });
+              ref.read(hoverProvider.notifier).state[index]=false;
+              ref.read(hoverProvider.notifier).state=[...ref.read(hoverProvider.notifier).state];
             },
             child: IconButton(
               onPressed: () {
                   _launchURL(socialButtonsData[index]['url']);
               },
               icon:socialButtonsData[index]['icon'],
-              color:socialButtonsData[index]['hover']?Colors.teal:Colors.black,
+              color:hover[index]?Colors.teal:Colors.black,
               tooltip:socialButtonsData[index]['toolTip'],
             ),
           ),
