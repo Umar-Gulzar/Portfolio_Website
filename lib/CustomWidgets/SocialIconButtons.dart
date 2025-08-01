@@ -41,7 +41,7 @@ class SocialIconButtonsState extends State<SocialIconButtons>
     },
     {
       'icon': FaIcon(FontAwesomeIcons.github),
-      'url' :'',
+      'url' :'https://github.com/Umar-Gulzar',
       'hover':false,
       'toolTip':'GitHub'
     },

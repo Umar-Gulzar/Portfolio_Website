@@ -33,11 +33,6 @@ class ContactSection extends StatelessWidget
      color: Colors.white,
      child:   Column(
        children: [
-         // Container(
-         //   color: Colors.black87,
-         //   width: double.infinity,
-         //   height: 1,
-         // ),
          Divider(color: Colors.black87,),
          Column(
            children: [

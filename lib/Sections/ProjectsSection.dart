@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../CustomWidgets/CustomMenuButton.dart';
 
 class ProjectsSection extends StatelessWidget
 {
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
+    }
+  }
+
+
   List<Map<String,String>> list=[
     {
-      'image':'Images/dp.png',
-      'buttonTitle':'Weather App'
+      'image':'Images/W_app.jpg',
+      'buttonTitle':'Weather App',
+      'link':'https://github.com/Umar-Gulzar/Weather_App'
     },
     {
-      'image':'Images/dp.png',
-      'buttonTitle':'Portfolio'
+      'image':'Images/portfolio.jpg',
+      'buttonTitle':'Portfolio',
+      'link':'https://github.com/Umar-Gulzar/Portfolio_Website'
     },
   ];
   @override
@@ -56,11 +68,13 @@ class ProjectsSection extends StatelessWidget
                           color: Colors.white,
                           elevation: 10,
                           clipBehavior: Clip.antiAlias,
-                          child: Image.asset(list[index]['image']!),
+                          child: Image.asset(list[index]['image']!,fit: BoxFit.fill,),
                         ),
                       ),
                       TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          _launchURL(list[index]['link']!);
+                        },
                         child: Text(list[index]['buttonTitle']!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500,color: Colors.teal),)),
 
                     ],
