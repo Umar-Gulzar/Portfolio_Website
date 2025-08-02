@@ -15,12 +15,12 @@ class ProjectsSection extends StatelessWidget
 
   List<Map<String,String>> list=[
     {
-      'image':'Images/W_app.jpg',
+      'image':'Images/W_app.png',
       'buttonTitle':'Weather App',
       'link':'https://github.com/Umar-Gulzar/Weather_App'
     },
     {
-      'image':'Images/portfolio.jpg',
+      'image':'Images/portfolio.png',
       'buttonTitle':'Portfolio',
       'link':'https://github.com/Umar-Gulzar/Portfolio_Website'
     },

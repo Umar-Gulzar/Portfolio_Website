@@ -8,7 +8,6 @@ import 'Sections/SkillsSection.dart';
 import 'Sections/ProjectsSection.dart';
 import 'Sections/HomeSection.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class Landing_Page extends StatefulWidget
 {

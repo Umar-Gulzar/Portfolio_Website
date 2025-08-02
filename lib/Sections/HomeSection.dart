@@ -17,13 +17,13 @@ class HomeSectionState extends State<HomeSection>
 
   @override
   void initState() {
-    _controller=AnimationController(vsync: this,duration: Duration(milliseconds: 800));
+    _controller=AnimationController(vsync: this,duration: Duration(milliseconds: 900));
 
     _upperSlide=Tween<Offset>(begin: Offset(0,-4),end: Offset.zero).chain(CurveTween(curve:Interval(0, 0.5,curve:Curves.easeInOut))).animate(_controller);
     _lowerSlide=Tween<Offset>(begin: Offset(0,2),end: Offset.zero).chain(CurveTween(curve:Interval(0.5, 0.8,curve:Curves.easeInOut))).animate(_controller);
     _scaleButton=Tween<double>(begin: 0,end: 1).chain(CurveTween(curve:Interval(0.7, 1,curve:Curves.easeInOut))).animate(_controller);
     _fadeAnimation=Tween<double>(begin: 0,end: 0.9).chain(CurveTween(curve:Interval( 0.6,1,curve:Curves.easeInOut))).animate(_controller);
-    _fadeAnimation2=Tween<double>(begin: 0,end: 0.9).chain(CurveTween(curve:Interval( 0,0.6,curve:Curves.easeInOut))).animate(_controller);
+    _fadeAnimation2=Tween<double>(begin: 0,end: 0.9).chain(CurveTween(curve:Interval( 0,0.7,curve:Curves.easeInOut))).animate(_controller);
 
 
     _controller.forward();

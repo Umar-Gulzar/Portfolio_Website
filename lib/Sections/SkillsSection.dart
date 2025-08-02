@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../CustomWidgets/CustomMenuButton.dart';
 import '../Providers/Providers.dart';
 import 'package:riverpod/riverpod.dart';
@@ -48,16 +49,29 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
   ];
 
   late AnimationController _controller;
+  late AnimationController _controller2;
+  late Animation<Offset> _slide1;
+  late Animation<Offset> _slide2;
+  late Animation<double> _fade1;
+  late Animation<double> _fade2;
 
   @override
   void initState() {
     _controller=AnimationController(vsync: this,duration: Duration(milliseconds: 700));
+    _controller2=AnimationController(vsync: this,duration: Duration(milliseconds: 900));
+
+    _fade1=Tween<double>(begin: 0,end: 0.8).chain(CurveTween(curve:Interval( 0,0.5,curve:Curves.easeInOut))).animate(_controller2);
+    _fade2=Tween<double>(begin: 0,end: 0.8).chain(CurveTween(curve:Interval( 0.5,1,curve:Curves.easeInOut))).animate(_controller2);
+    _slide1=Tween<Offset>(begin: Offset(0, 0.5),end: Offset.zero).chain(CurveTween(curve:Interval(0, 0.4,curve:  Curves.easeInOut))).animate(_controller2);
+    _slide2=Tween<Offset>(begin: Offset(0, 0.5),end: Offset.zero).chain(CurveTween(curve:Interval(0.6, 1,curve:  Curves.easeInOut))).animate(_controller2);
+
     // TODO: implement initState
     super.initState();
   }
   @override
   void dispose() {
     _controller.dispose();
+    _controller2.dispose();
     // TODO: implement dispose
   }
   @override
@@ -113,55 +127,66 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
                           return ScaleTransition(
                             scale: hover[index] ? Tween<double>(
                                 begin: 1, end: 1.03).chain(
-                                CurveTween(curve: Curves.bounceInOut)).animate(
-                                _controller)
+                                CurveTween(curve: Curves.bounceInOut)).animate(_controller)
                                 : Tween<double>(begin: 1, end: 1).chain(
-                                CurveTween(curve: Curves.bounceInOut)).animate(
-                                _controller),
-                            child: AnimatedContainer(
-                              //   clipBehavior: Clip.antiAlias,
-                              duration: Duration(milliseconds: 700),
-                              curve: Curves.easeInOut,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceEvenly,
-                                  children: [
-                                    SizedBox(
-                                      height: 80,
-                                      width: 80,
-                                      child: FittedBox(
-                                        child: Image.asset(
-                                          list[index]['icon']!,),
-                                        fit: BoxFit.cover,
+                                CurveTween(curve: Curves.bounceInOut)).animate(_controller),
+                            child: VisibilityDetector(
+                              key: UniqueKey(),
+                              onVisibilityChanged: (v){
+                                if(v.visibleFraction>0.2)
+                                  _controller2.forward();
+                                },
+                              child: SlideTransition(
+                                position: index<3?_slide1:_slide2,
+                                child: FadeTransition(
+                                  opacity: index<3?_fade1:_fade2,
+                                  child: AnimatedContainer(
+                                    //   clipBehavior: Clip.antiAlias,
+                                    duration: Duration(milliseconds: 700),
+                                    curve: Curves.easeInOut,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceEvenly,
+                                        children: [
+                                          SizedBox(
+                                            height: 80,
+                                            width: 80,
+                                            child: FittedBox(
+                                              child: Image.asset(
+                                                list[index]['icon']!,),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Text(
+                                            list[index]['title']!,
+                                            style: TextStyle(color: Colors.white54,
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          Text(
+                                            list[index]['subtitle']!,
+                                            style: TextStyle(
+                                              color: Colors.white54, fontSize: 20,),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Text(
-                                      list[index]['title']!,
-                                      style: TextStyle(color: Colors.white54,
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.w400),
+                                    decoration: BoxDecoration(
+                                        color: Colors.black12,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [BoxShadow(
+                                            color: hover[index] ? Colors
+                                                .tealAccent : Colors.white54,
+                                            blurRadius: hover[index] ? 5 : 1,
+                                            blurStyle: BlurStyle.outer
+                                        )
+                                        ]
                                     ),
-                                    Text(
-                                      list[index]['subtitle']!,
-                                      style: TextStyle(
-                                        color: Colors.white54, fontSize: 20,),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.black12,
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [BoxShadow(
-                                      color: hover[index] ? Colors
-                                          .tealAccent : Colors.white54,
-                                      blurRadius: hover[index] ? 5 : 1,
-                                      blurStyle: BlurStyle.outer
-                                  )
-                                  ]
                               ),
                             ),
                           );

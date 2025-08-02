@@ -147,7 +147,7 @@ class AboutmeSectionState extends State<AboutmeSection>
                       "I’m, a Flutter developer who loves creating modern and responsive mobile apps. "
                           "I enjoy turning ideas into beautiful apps\nusing Flutter and Dart."
                           "I work with tools like Firebase, REST APIs, and Riverpod to build real-world apps. "
-                          "Right now, \nI'm learning advanced Flutter animations and improving my UI/UX skills.\n\n"
+                          "Right now, \nI'm learning Flutter Backend and also improving my UI/UX skills.\n\n"
                           "I'm always excited to learn new things and build apps that people love to use.",
                       style: TextStyle(fontSize: 16, color: Colors.black54),
                       textAlign: TextAlign.justify,
