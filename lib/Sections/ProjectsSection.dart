@@ -30,77 +30,95 @@ class ProjectsSection extends StatelessWidget
     return  Container(
       key: PROJECTS_KEY,
       width: MediaQuery.of(context).size.width,
-      height:  MediaQuery.of(context).size.width>500?MediaQuery.of(context).size.height:null,
+      height:  MediaQuery.of(context).size.width>800?MediaQuery.of(context).size.height:null,
       color: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 30,),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text("Projects",style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontSize: MediaQuery.of(context).size.width*0.04,
-              ),),
-            ),
-            const SizedBox(height: 20,),
-            Center(
-              child: LayoutBuilder(
-                builder: (context,constraints){
-                  int count;
-                  if(MediaQuery.of(context).size.width>1200)
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 40,),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text("Projects",style: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: (MediaQuery.of(context).size.width*0.03).clamp(35, 50),
+            ),),
+          ),
+          Padding(
+            padding:EdgeInsets.all(30) ,
+            child: LayoutBuilder(
+              builder: (context,constraints){
+                int count;
+                double ratio;
+                if(MediaQuery.of(context).size.width>1200)
+                {
+                  count = 3;
+                  ratio=1;
+                }
+                else if(MediaQuery.of(context).size.width>600)
                   {
-                    count = 3;
+                    count=2;
+                    ratio=1;
                   }
-                  else if(MediaQuery.of(context).size.width>600)
-                    {
-                      count=2;
-                    }
-                  else
-                  {
-                    count = 1;
-                  }
+                else
+                {
+                  count = 1;
+                  ratio=1;
+                }
 
-                return GridView.builder(
-                    itemCount: list.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: count,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                      childAspectRatio: 4/3,
-                ),
-                    itemBuilder: (context,index)
-                    {
-                      return Column(
-                        children: [
-                          Flexible(
-                            child: Card(
-                              color: Colors.white,
-                              elevation: 10,
-                              clipBehavior: Clip.antiAlias,
-                              child: Image.asset(list[index]['image']!,fit: BoxFit.fill,width: double.infinity,height: double.infinity,),
+              return GridView.builder(
+                  itemCount: list.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: count,
+                   // crossAxisSpacing: 20,
+                  // mainAxisSpacing: 20,
+                    childAspectRatio: ratio,
+              ),
+                  itemBuilder: (context,index)
+                  {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      spacing: 20,
+                      children: [
+                        SizedBox(
+                          width: 400,
+                          height: 300,
+                          child: Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                            elevation: 10,
+                            clipBehavior: Clip.antiAlias,
+                            child: Image.asset(
+                              list[index]['image']!,
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height:double.infinity,
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          TextButton(
-                            onPressed: (){
-                              _launchURL(list[index]['link']!);
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            _launchURL(list[index]['link']!);
                             },
-                            child: Text(list[index]['buttonTitle']!,style: TextStyle(fontSize: constraints.maxWidth*0.025,fontWeight: FontWeight.w500,color: Colors.teal),)),
+                          child: Text(
+                            list[index]['buttonTitle']!,
+                            style: TextStyle(
+                                fontSize: (constraints.maxWidth*0.020).clamp(20, 50),
+                                fontWeight: FontWeight.w500,
+                                color: Colors.teal
+                            ),
+                          ),
+                        ),
 
-                        ],
-                      );
-                    }
-                );}
-              ),
+                      ],
+                    );
+                  }
+              );}
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

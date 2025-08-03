@@ -120,8 +120,9 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
                     count=2;
                   ratio=1;
                   }
-                  return GridView.builder(itemCount: 6,shrinkWrap: true,
-
+                  return GridView.builder(
+                      itemCount: 6,
+                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
                    crossAxisCount:count,

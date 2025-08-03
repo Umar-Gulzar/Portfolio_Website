@@ -51,13 +51,13 @@ class CustomMenuButton extends ConsumerWidget
                 Text(
                   button[index],
                   style: TextStyle(
-                  color: hover[index] || hover[index] ? Colors.tealAccent : Colors.white
+                  color: hover[index] || press[index] ? Colors.tealAccent : Colors.white
                   ),
                 ),
                 SizedBox(height: 8,),
                 Container(height: 1,
                 width: 60,
-                color: hover[index] || hover[index] ? Colors.white : Colors.transparent
+                color: hover[index] || press[index] ? Colors.white : Colors.transparent
             )
           ],
         )

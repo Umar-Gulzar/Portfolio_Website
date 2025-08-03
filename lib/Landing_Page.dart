@@ -117,7 +117,7 @@ class Landing_PageState extends State<Landing_Page>
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                        Container(
-                         color: Colors.transparent,
+                         //color: Colors.grey,
                          height: 280,width: 200,
                        child: FittedBox(
                          child: RichText(
@@ -128,7 +128,7 @@ class Landing_PageState extends State<Landing_Page>
                                      style: GoogleFonts.orbitron(
                                          textStyle:TextStyle(
                                              color: Colors.white,
-                                             fontSize: 30,
+                                             fontSize: (screenWidth*0.02).clamp(15, 30),
                                              fontWeight: FontWeight.bold,
                                              shadows: [Shadow(
                                                color: Colors.white,
@@ -141,7 +141,7 @@ class Landing_PageState extends State<Landing_Page>
                                      style: GoogleFonts.orbitron(
                                          textStyle:TextStyle(
                                              color: Colors.tealAccent,
-                                             fontSize: 30,
+                                             fontSize:(screenWidth*0.02).clamp(15, 30),
                                              fontWeight: FontWeight.bold,
                                              shadows: [Shadow(
                                                color: Colors.tealAccent,
