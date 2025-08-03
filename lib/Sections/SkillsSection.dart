@@ -89,30 +89,37 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
        fit: StackFit.passthrough,
         children: [
           Padding(
-            padding:EdgeInsets.all(screenWidth*0.01),
+            padding:EdgeInsets.all(screenWidth<800?30:30),
             child: Align(
               alignment: Alignment.topCenter,
               child: Text("Tech Stack & Skills",style: TextStyle(
                 color: Colors.white54,
                 fontWeight: FontWeight.bold,
-                fontSize: screenWidth*0.040,
+                fontSize: (screenWidth*0.040).clamp(35, 45),
               ),),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: screenWidth*0.09,left:screenWidth*0.05,right: screenWidth*0.05,bottom: screenWidth*0.05),
+            padding: EdgeInsets.only(top: screenWidth<800?100:screenWidth*0.09,left:screenWidth*0.05,right: screenWidth*0.05,bottom: screenWidth*0.05),
             child: Align(
               alignment: Alignment.center,
 
               child: LayoutBuilder(
                 builder: (context,constraints){
                   int count;
-                  if(screenWidth>1200)
-                    count=3;
-                  else if(screenWidth>600)
+                  double ratio;
+                  if(screenWidth>1200) {
+                    count = 3;
+                    ratio = 2 / 1;
+                  }
+                  else if(screenWidth>800) {
+                    count = 2;
+                    ratio = 2/1;
+                  }
+                  else {
                     count=2;
-                  else
-                    count=1;
+                  ratio=1;
+                  }
                   return GridView.builder(itemCount: 6,shrinkWrap: true,
 
                     physics: NeverScrollableScrollPhysics(),
@@ -120,7 +127,7 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
                    crossAxisCount:count,
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 20,
-                      childAspectRatio: 2/1,
+                      childAspectRatio: ratio,
                     ),
                     itemBuilder: (context,index)
                     {
@@ -166,8 +173,8 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
                                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                             children: [
                                               SizedBox(
-                                                height: con.maxHeight*0.15,
-                                                width: con.maxWidth*0.15,
+                                                height: (con.maxHeight*0.15).clamp(50, 60),
+                                                width: (con.maxWidth*0.15).clamp(50, 60),
                                                 child: FittedBox(
                                                   child: Image.asset(
                                                     list[index]['icon']!,),
@@ -177,13 +184,13 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
                                               Text(
                                                 list[index]['title']!,
                                                 style: TextStyle(color: Colors.white54,
-                                                    fontSize: con.maxWidth*0.05,
+                                                    fontSize: (con.maxWidth*0.05).clamp(25,45),
                                                     fontWeight: FontWeight.w400),
                                               ),
                                               Text(
                                                 list[index]['subtitle']!,
                                                 style: TextStyle(
-                                                  color: Colors.white54, fontSize: con.maxWidth*0.04,),
+                                                  color: Colors.white54, fontSize: (con.maxWidth*0.04).clamp(20,30),),
                                               ),
                                             ],
                                           ),

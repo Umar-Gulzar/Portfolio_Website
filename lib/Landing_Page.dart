@@ -21,6 +21,9 @@ class Landing_PageState extends State<Landing_Page>
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth=MediaQuery.of(context).size.width;
+    double screenHeight=MediaQuery.of(context).size.height;
+
     return Scaffold(
         appBar: AppBar(
           title: Row(
@@ -35,9 +38,9 @@ class Landing_PageState extends State<Landing_Page>
                    [
                      TextSpan(text:"</>Umar",
                     style: GoogleFonts.orbitron(
-                        textStyle: const TextStyle(
+                        textStyle: TextStyle(
                             color: Colors.white,
-                            fontSize: 30,
+                            fontSize: (screenWidth*0.02).clamp(20,30),
                             fontWeight: FontWeight.bold,
                             shadows: [Shadow(
                               color: Colors.white,
@@ -48,9 +51,9 @@ class Landing_PageState extends State<Landing_Page>
                         )),),
                      TextSpan(text:"Dev",
                        style: GoogleFonts.orbitron(
-                           textStyle: const TextStyle(
+                           textStyle:TextStyle(
                                color: Colors.tealAccent,
-                               fontSize: 30,
+                               fontSize: (screenWidth*0.02).clamp(20, 30),
                                fontWeight: FontWeight.bold,
                                shadows: [Shadow(
                                  color: Colors.tealAccent,
@@ -66,12 +69,29 @@ class Landing_PageState extends State<Landing_Page>
           ),
           backgroundColor: Colors.black,
           actions: [
-            for(int i=0;i<5;i++)
-             CustomMenuButton(i),
-            Flexible(child: SizedBox(width: 70,)),
-
+            if(screenWidth<=800)
+             PopupMenuButton(
+               surfaceTintColor: Colors.teal,
+               color: Colors.black87,
+               constraints: BoxConstraints(maxWidth:double.infinity,minWidth: double.infinity),
+               menuPadding: EdgeInsets.zero,
+               position: PopupMenuPosition.under,
+               offset: Offset(0, 15),
+               iconColor: Colors.white,
+                 itemBuilder: (context){
+      return [
+        PopupMenuItem(child:Center(child: Text("Home",style: TextStyle(color: Colors.white54),)),onTap: (){scrollToSection(HOME_KEY);},),
+        PopupMenuItem(child: Center(child: Text("About Me",style: TextStyle(color: Colors.white54))),onTap: (){scrollToSection(ABOUTME_KEY);},),
+        PopupMenuItem(child: Center(child: Text("Skills",style: TextStyle(color: Colors.white54))),onTap: (){scrollToSection(SKILLS_KEY);},),
+        PopupMenuItem(child: Center(child: Text("Projects",style: TextStyle(color: Colors.white54))),onTap: (){scrollToSection(PROJECTS_KEY);},),
+        PopupMenuItem(child: Center(child: Text("Contact",style: TextStyle(color: Colors.white54))),onTap: (){scrollToSection(CONTACT_KEY);},),
+      ];
+    }),
+            if(screenWidth>800)
+                for(int i=0;i<5;i++)
+                     CustomMenuButton(i),
+                Flexible(child: SizedBox(width:screenWidth<=800?10:70)),
           ]
-          ,
         ),
 
 
@@ -106,7 +126,7 @@ class Landing_PageState extends State<Landing_Page>
                                  [
                                    TextSpan(text:"</>Umar",
                                      style: GoogleFonts.orbitron(
-                                         textStyle: const TextStyle(
+                                         textStyle:TextStyle(
                                              color: Colors.white,
                                              fontSize: 30,
                                              fontWeight: FontWeight.bold,
@@ -119,7 +139,7 @@ class Landing_PageState extends State<Landing_Page>
                                          )),),
                                    TextSpan(text:"Dev",
                                      style: GoogleFonts.orbitron(
-                                         textStyle: const TextStyle(
+                                         textStyle:TextStyle(
                                              color: Colors.tealAccent,
                                              fontSize: 30,
                                              fontWeight: FontWeight.bold,
@@ -139,7 +159,13 @@ class Landing_PageState extends State<Landing_Page>
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(height: 20,),
-                            Text("Quick Links",style: TextStyle(fontSize:20 ,fontWeight: FontWeight.w400,color: Colors.white),),
+                            Text("Quick Links",
+                              style: TextStyle(
+                                  fontSize:20 ,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.white
+                              ),
+                            ),
                             SizedBox(height: 30,),
                             SizedBox(
                               height: 200,
@@ -151,7 +177,12 @@ class Landing_PageState extends State<Landing_Page>
                                     onPressed: (){
                                       scrollToSection(BUTTON_KEYS[index]);
                                     },
-                                    child:Text(menuButtons[index],style: TextStyle(color:isButtonHovered[index]?Colors.tealAccent:Colors.white70 ),),
+                                    child:Text(
+                                    menuButtons[index],
+                                      style: TextStyle(
+                                          color:isButtonHovered[index]?Colors.tealAccent:Colors.white70
+                                      ),
+                                    ),
                                   onHover: (b){
                                       setState(() {
                                          isButtonHovered=List.filled(5, false);

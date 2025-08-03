@@ -61,7 +61,7 @@ class HomeSectionState extends State<HomeSection>
                   child: Text("Hi, I’m Umar Gulzar",style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: screenWidth*0.03,
+                    fontSize: (screenWidth*0.03).clamp(25.0, 45),
                   ),),
                 ),
               ),
@@ -77,7 +77,7 @@ class HomeSectionState extends State<HomeSection>
                         child: Text("Flutter",style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: constraints.maxWidth*0.06,
+                            fontSize: (constraints.maxWidth*0.06).clamp(50, 90),
                             fontFamily: "Neuropol"
                         ),
                         ),
@@ -91,28 +91,31 @@ class HomeSectionState extends State<HomeSection>
                           (
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: constraints.maxWidth*0.06,
+                          fontSize: (constraints.maxWidth*0.06).clamp(50, 90),
                           fontFamily: 'Neuropol',
                         ),),
                       ),
                     ),
+                    SizedBox(height: screenWidth<600?10:0),
                     FadeTransition(
                       opacity: _fadeAnimation2,
                       child: Text("“Turning ideas into interactive apps.”",style: TextStyle(
                         color: Colors.white,
-                        fontSize: constraints.maxWidth*0.015,
+                        fontSize: (constraints.maxWidth*0.015).clamp(15, 25),
                       ),),
                     ),
                     SizedBox(height: 20,),
                     FadeTransition(
                       opacity: _fadeAnimation2,
-                      child: Text("I build smooth, beautiful, and high-performance cross-platform apps using Flutter.",style: TextStyle(
+                      child: Text("I build smooth, beautiful, and high-performance cross-platform apps using Flutter.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
                         color: Colors.white,
-                        fontSize: constraints.maxWidth*0.015,
+                        fontSize: (constraints.maxWidth*0.015).clamp(15, 25),
                       ),),
                     ),
 
-                    SizedBox(height: 30),
+                    SizedBox(height:screenWidth>800? 30:45),
 
                     ScaleTransition(
                       scale: _scaleButton,
@@ -127,10 +130,14 @@ class HomeSectionState extends State<HomeSection>
                         onPressed: () {
                           scrollToSection(CONTACT_KEY);
                         },
-                        child: Text("Hire Me",style: TextStyle(color: Colors.black),),
+                        child: Text("Hire Me",
+                          style: TextStyle(
+                              color: Colors.black
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(height: 35),
+                    SizedBox(height: screenWidth>800? 35:40),
                     ScaleTransition(
                       scale: _scaleButton,
                       child: OutlinedButton(
