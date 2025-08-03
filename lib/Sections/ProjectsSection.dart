@@ -29,60 +29,78 @@ class ProjectsSection extends StatelessWidget
   Widget build(BuildContext context) {
     return  Container(
       key: PROJECTS_KEY,
-      width: double.infinity,
-      height: 690,
+      width: MediaQuery.of(context).size.width,
+      height:  MediaQuery.of(context).size.width>500?MediaQuery.of(context).size.height:null,
       color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 30,),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Text("Projects",style: TextStyle(
-              color: Colors.black87,
-              fontWeight: FontWeight.bold,
-              fontSize: 50,
-            ),),
-          ),
-          Center(
-            child: GridView.builder(
-              itemCount: 2,
-              shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 500,
-                  crossAxisSpacing: 50,
-                  childAspectRatio: 1/1
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 30,),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Text("Projects",style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.bold,
+                fontSize: MediaQuery.of(context).size.width*0.04,
+              ),),
             ),
-                itemBuilder: (context,index)
-                {
-                  return Column(
-                    spacing: 20,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height:300,
-                        width: 500,
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 10,
-                          clipBehavior: Clip.antiAlias,
-                          child: Image.asset(list[index]['image']!,fit: BoxFit.fill,),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: (){
-                          _launchURL(list[index]['link']!);
-                        },
-                        child: Text(list[index]['buttonTitle']!,style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500,color: Colors.teal),)),
+            const SizedBox(height: 20,),
+            Center(
+              child: LayoutBuilder(
+                builder: (context,constraints){
+                  int count;
+                  if(MediaQuery.of(context).size.width>1200)
+                  {
+                    count = 3;
+                  }
+                  else if(MediaQuery.of(context).size.width>600)
+                    {
+                      count=2;
+                    }
+                  else
+                  {
+                    count = 1;
+                  }
 
-                    ],
-                  );
-                }
+                return GridView.builder(
+                    itemCount: list.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: count,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
+                      childAspectRatio: 4/3,
+                ),
+                    itemBuilder: (context,index)
+                    {
+                      return Column(
+                        children: [
+                          Flexible(
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 10,
+                              clipBehavior: Clip.antiAlias,
+                              child: Image.asset(list[index]['image']!,fit: BoxFit.fill,width: double.infinity,height: double.infinity,),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextButton(
+                            onPressed: (){
+                              _launchURL(list[index]['link']!);
+                            },
+                            child: Text(list[index]['buttonTitle']!,style: TextStyle(fontSize: constraints.maxWidth*0.025,fontWeight: FontWeight.w500,color: Colors.teal),)),
+
+                        ],
+                      );
+                    }
+                );}
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

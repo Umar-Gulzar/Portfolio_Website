@@ -39,10 +39,12 @@ class HomeSectionState extends State<HomeSection>
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth=MediaQuery.of(context).size.width;
+    final double screenHeight=MediaQuery.of(context).size.height;
     return Container(
       key:HOME_KEY,
-      height: 700,
-      width: double.infinity,
+      height: screenHeight,
+      width: screenWidth,
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [Colors.black, Colors.teal]),
       ),
@@ -52,14 +54,14 @@ class HomeSectionState extends State<HomeSection>
             return Stack(
             children: [
               Positioned(
-                top: constraints.maxHeight/12,
-                left:constraints.maxWidth/10,
+                top: screenHeight/12,
+                left:screenWidth/10,
                 child: FadeTransition(
                   opacity: _fadeAnimation2,
                   child: Text("Hi, I’m Umar Gulzar",style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: constraints.maxWidth*0.03,
+                    fontSize: screenWidth*0.03,
                   ),),
                 ),
               ),

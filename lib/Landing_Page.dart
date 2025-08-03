@@ -96,7 +96,9 @@ class Landing_PageState extends State<Landing_Page>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                       Container(color: Colors.transparent,height: 280,width: 200,
+                       Container(
+                         color: Colors.transparent,
+                         height: 280,width: 200,
                        child: FittedBox(
                          child: RichText(
                              text: TextSpan(

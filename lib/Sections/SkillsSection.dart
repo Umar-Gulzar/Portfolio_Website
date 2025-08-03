@@ -76,124 +76,140 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
   }
   @override
   Widget build(BuildContext context) {
+
+    double screenWidth=MediaQuery.of(context).size.width;
+    double screenHeight=MediaQuery.of(context).size.height;
+
     return Container(
       key: SKILLS_KEY,
-      width: double.infinity,
-      height: 700,
+      width: screenWidth,
+      //height: screenHeight,   //let to grow height of container naturally then not give height.
       color: Colors.black87,
       child:Stack(
-        fit: StackFit.expand,
+       fit: StackFit.passthrough,
         children: [
           Padding(
-            padding:EdgeInsets.all(40),
+            padding:EdgeInsets.all(screenWidth*0.01),
             child: Align(
               alignment: Alignment.topCenter,
               child: Text("Tech Stack & Skills",style: TextStyle(
                 color: Colors.white54,
                 fontWeight: FontWeight.bold,
-                fontSize: 50,
+                fontSize: screenWidth*0.040,
               ),),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 40,left: 100,right: 100),
+            padding: EdgeInsets.only(top: screenWidth*0.09,left:screenWidth*0.05,right: screenWidth*0.05,bottom: screenWidth*0.05),
             child: Align(
               alignment: Alignment.center,
 
-              child: GridView.builder(itemCount: 6,shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
-                 crossAxisCount:3,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 2/1,
-                  ),
-                  itemBuilder: (context,index)
-                  {
-                    return  MouseRegion(
-                      onEnter: (b){
-                        _controller.forward();
-                        ref.read(skillContainerHoverProvider.notifier).state[index]=true;
-                        ref.read(skillContainerHoverProvider.notifier).state=ref.read(skillContainerHoverProvider.notifier).state.toList();
-                       },
-                      onExit: (b){
-                        _controller.reverse();
-                        ref.read(skillContainerHoverProvider.notifier).state[index]=false;
-                        ref.read(skillContainerHoverProvider.notifier).state=ref.read(skillContainerHoverProvider.notifier).state.toList();
-                       },
-                      child: Consumer(
-                        builder: (context,ref,child) {
-                          final hover=ref.watch(skillContainerHoverProvider);
-                          return ScaleTransition(
-                            scale: hover[index] ? Tween<double>(
-                                begin: 1, end: 1.03).chain(
-                                CurveTween(curve: Curves.bounceInOut)).animate(_controller)
-                                : Tween<double>(begin: 1, end: 1).chain(
-                                CurveTween(curve: Curves.bounceInOut)).animate(_controller),
-                            child: VisibilityDetector(
-                              key: UniqueKey(),
-                              onVisibilityChanged: (v){
-                                if(v.visibleFraction>0.2)
-                                  _controller2.forward();
-                                },
-                              child: SlideTransition(
-                                position: index<3?_slide1:_slide2,
-                                child: FadeTransition(
-                                  opacity: index<3?_fade1:_fade2,
-                                  child: AnimatedContainer(
-                                    //   clipBehavior: Clip.antiAlias,
-                                    duration: Duration(milliseconds: 700),
-                                    curve: Curves.easeInOut,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceEvenly,
-                                        children: [
-                                          SizedBox(
-                                            height: 80,
-                                            width: 80,
-                                            child: FittedBox(
-                                              child: Image.asset(
-                                                list[index]['icon']!,),
-                                              fit: BoxFit.cover,
-                                            ),
+              child: LayoutBuilder(
+                builder: (context,constraints){
+                  int count;
+                  if(screenWidth>1200)
+                    count=3;
+                  else if(screenWidth>600)
+                    count=2;
+                  else
+                    count=1;
+                  return GridView.builder(itemCount: 6,shrinkWrap: true,
+
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate:SliverGridDelegateWithFixedCrossAxisCount(
+                   crossAxisCount:count,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      childAspectRatio: 2/1,
+                    ),
+                    itemBuilder: (context,index)
+                    {
+                      return  MouseRegion(
+                        onEnter: (b){
+                          _controller.forward();
+                          ref.read(skillContainerHoverProvider.notifier).state[index]=true;
+                          ref.read(skillContainerHoverProvider.notifier).state=ref.read(skillContainerHoverProvider.notifier).state.toList();
+                         },
+                        onExit: (b){
+                          _controller.reverse();
+                          ref.read(skillContainerHoverProvider.notifier).state[index]=false;
+                          ref.read(skillContainerHoverProvider.notifier).state=ref.read(skillContainerHoverProvider.notifier).state.toList();
+                         },
+                        child: Consumer(
+                          builder: (context,ref,child) {
+                            final hover=ref.watch(skillContainerHoverProvider);
+                            return ScaleTransition(
+                              scale: hover[index] ? Tween<double>(
+                                  begin: 1, end: 1.03).chain(
+                                  CurveTween(curve: Curves.bounceInOut)).animate(_controller)
+                                  : Tween<double>(begin: 1, end: 1).chain(
+                                  CurveTween(curve: Curves.bounceInOut)).animate(_controller),
+                              child: VisibilityDetector(
+                                key: UniqueKey(),
+                                onVisibilityChanged: (v){
+                                  if(v.visibleFraction>0.2)
+                                    _controller2.forward();
+                                  },
+                                child: SlideTransition(
+                                  position: index<3?_slide1:_slide2,
+                                  child: FadeTransition(
+                                    opacity: index<3?_fade1:_fade2,
+                                    child: LayoutBuilder(
+                                      builder: (context,con){
+                                      return AnimatedContainer(
+                                        duration: Duration(milliseconds: 700),
+                                        curve: Curves.easeInOut,
+                                        child: Padding(
+                                          padding: EdgeInsets.all(20),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              SizedBox(
+                                                height: con.maxHeight*0.15,
+                                                width: con.maxWidth*0.15,
+                                                child: FittedBox(
+                                                  child: Image.asset(
+                                                    list[index]['icon']!,),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              Text(
+                                                list[index]['title']!,
+                                                style: TextStyle(color: Colors.white54,
+                                                    fontSize: con.maxWidth*0.05,
+                                                    fontWeight: FontWeight.w400),
+                                              ),
+                                              Text(
+                                                list[index]['subtitle']!,
+                                                style: TextStyle(
+                                                  color: Colors.white54, fontSize: con.maxWidth*0.04,),
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            list[index]['title']!,
-                                            style: TextStyle(color: Colors.white54,
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          Text(
-                                            list[index]['subtitle']!,
-                                            style: TextStyle(
-                                              color: Colors.white54, fontSize: 20,),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black12,
-                                        borderRadius: BorderRadius.circular(20),
-                                        boxShadow: [BoxShadow(
-                                            color: hover[index] ? Colors
-                                                .tealAccent : Colors.white54,
-                                            blurRadius: hover[index] ? 5 : 1,
-                                            blurStyle: BlurStyle.outer
-                                        )
-                                        ]
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: Colors.black12,
+                                            borderRadius: BorderRadius.circular(20),
+                                            boxShadow: [BoxShadow(
+                                                color: hover[index] ? Colors
+                                                    .tealAccent : Colors.white54,
+                                                blurRadius: hover[index] ? 5 : 1,
+                                                blurStyle: BlurStyle.outer
+                                            )
+                                            ]
+                                        ),
+                                      );}
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
-                      ),
-                    );
-                  }
+                            );
+                          }
+                        ),
+                      );
+                    }
+                                  );}
               ),
             ),
           ),

@@ -16,10 +16,10 @@ void main()
             colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.red,          // Defines all shades
         ),),
-      title: "Form",
-      debugShowCheckedModeBanner: false,
-      home: Landing_Page(),
-    ),
+              title: "Form",
+              debugShowCheckedModeBanner: false,
+              home: Landing_Page(),
+            ),
   ));
 }
 
