@@ -83,18 +83,20 @@ class ProjectsSection extends StatelessWidget
                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       spacing: 20,
                       children: [
-                        SizedBox(
-                          width: 400,
-                          height: 300,
-                          child: Card(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                            elevation: 10,
-                            clipBehavior: Clip.antiAlias,
-                            child: Image.asset(
-                              list[index]['image']!,
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                              height:double.infinity,
+                        Flexible(
+                          child: SizedBox(
+                            width: 400,
+                            height: 300,
+                            child: Card(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                              elevation: 10,
+                              clipBehavior: Clip.antiAlias,
+                              child: Image.asset(
+                                list[index]['image']!,
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height:double.infinity,
+                              ),
                             ),
                           ),
                         ),

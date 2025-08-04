@@ -4,7 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../CustomWidgets/CustomMenuButton.dart';
 import '../CustomWidgets/SocialIconButtons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
+import '../CustomWidgets/ProfileCard.dart';
+import '../CustomWidgets/ProfilePicture.dart';
 
 class AboutmeSection extends StatefulWidget
 {
@@ -16,7 +17,7 @@ class AboutmeSectionState extends State<AboutmeSection>
 
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
-  late Animation<Offset> _leftSlide;
+  late Animation<Offset> _rightSlide;
   late Animation<double> _scaleButton;
   late Animation<Offset> _lowerSlide;
   late Animation<double> _fadeAnimation;
@@ -24,7 +25,7 @@ class AboutmeSectionState extends State<AboutmeSection>
   @override
   void initState() {
     _controller=AnimationController(vsync: this,duration: Duration(milliseconds: 700));
-    _leftSlide=Tween<Offset>(begin: Offset(2,0),end: Offset.zero).chain(CurveTween(curve:Interval(0, 0.6,curve:Curves.easeInOut))).animate(_controller);
+    _rightSlide=Tween<Offset>(begin: Offset(2,0),end: Offset.zero).chain(CurveTween(curve:Interval(0, 0.6,curve:Curves.easeInOut))).animate(_controller);
     _scaleButton=Tween<double>(begin: 0,end: 1).chain(CurveTween(curve:Interval(0.6, 1,curve:Curves.easeInOut))).animate(_controller);
     _lowerSlide=Tween<Offset>(begin: Offset(0,2),end: Offset.zero).chain(CurveTween(curve:Interval(0.5, 0.8,curve:Curves.easeInOut))).animate(_controller);
     _fadeAnimation=Tween<double>(begin: 0,end: 0.9).chain(CurveTween(curve:Interval( 0.4,0.8,curve:Curves.easeInOut))).animate(_controller);
@@ -43,6 +44,8 @@ class AboutmeSectionState extends State<AboutmeSection>
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth=MediaQuery.of(context).size.width;
+    double screenHeight=MediaQuery.of(context).size.height;
     return VisibilityDetector(
       key: Key("Aboutme_key"),
       onVisibilityChanged: (info){
@@ -51,136 +54,105 @@ class AboutmeSectionState extends State<AboutmeSection>
       child: Container(
         key: ABOUTME_KEY,
         width: double.infinity,
-        height: 600,
+        height:screenWidth>800? 600:null,
         color: Colors.white,
-        child: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(30),
-              child: SizedBox(
-                height: 500,
-                width: 500,
-                child: Card(
-                  color: Colors.white,
-                  clipBehavior: Clip.antiAlias,
-                  elevation: 30,
+        child: LayoutBuilder(
+          builder: (context,constraints) {
+            return Flex(
+              direction: screenWidth > 800 ? Axis.horizontal : Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if(constraints.maxWidth>800)
+                  profileCard(_rightSlide, _fadeAnimation, _lowerSlide),
+                if(constraints.maxWidth<800)
+                  profilePicture(screenWidth, _rightSlide, _fadeAnimation),
+                Padding(
+                  padding: EdgeInsets.only(top: screenWidth * 0.05,
+                    left: screenWidth <= 800 ? screenWidth * 0.05 : 0,
+                    right: screenWidth <= 800 ? screenWidth * 0.05 : 0,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20,),
-                      Container(
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(colors: [Colors.black, Colors
-                              .tealAccent
-                          ]),
-                        ),
-                        child: SlideTransition(
-                          position: _leftSlide,
-                          child: FadeTransition(
-                            opacity: _fadeAnimation,
-                            child: Image.asset(
-                              "Images/dp.png", height: 200, width: 200,),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 40,),
-                      Container(height: 2, width: 300, color: Colors.black12,),
-                      const SizedBox(height: 30,),
+
                       SlideTransition(
-                        position: _lowerSlide,
+                        position: _rightSlide,
                         child: FadeTransition(
                           opacity: _fadeAnimation,
-                          child: Text("Umar Gulzar", style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),),
+                          child: Text("Hi, I’m Umar Gulzar", style: TextStyle(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            fontSize: (constraints.maxWidth*0.02).clamp(25,30),
+                          ),),
                         ),
                       ),
-                      const SizedBox(height: 20,),
-                      Container(height: 2, width: 60, color: Colors.black12,),
-                      const SizedBox(height: 30,),
                       SlideTransition(
-                        position: _lowerSlide,
+                        position: _rightSlide,
                         child: FadeTransition(
                           opacity: _fadeAnimation,
-                          child: Text("Flutter Developer",
-                            style: TextStyle(fontSize: 30, color: Colors.teal),),
+                          child: Text(
+                            "Flutter Developer", style: TextStyle(
+                            fontSize:(constraints.maxWidth*0.015).clamp(21,22),
+                            color: Colors.teal,
+                            fontWeight: FontWeight.w600,
+                          ),),
                         ),
                       ),
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "I’m, a Flutter developer who loves creating modern and responsive mobile apps. "
+                              "I enjoy turning ideas into beautiful apps\nusing Flutter and Dart."
+                              "I work with tools like Firebase, REST APIs, and Riverpod to build real-world apps. "
+                              "Right now, \nI'm learning Flutter Backend and also improving my UI/UX skills.\n\n"
+                              "I'm always excited to learn new things and build apps that people love to use.",
+                          style: TextStyle(
+                              fontSize: (constraints.maxWidth*0.011).clamp(15,20),
+                              color: Colors.black54),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                      ScaleTransition(
+                        scale: _scaleButton,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 6,
+                                    // shadowColor: Colors.white10,
+                                    backgroundColor: Colors.teal[300],
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))
+                                    )),
+                                onPressed: () {
+                                  setState(() {
+                                    scrollToSection(CONTACT_KEY);
+                                  });
+                                },
+                                child: Text(
+                                  "Contact",
+                                  style: TextStyle(color: Colors.black),)),
+                            screenWidth < 800 ? SocialIconButtons() : SizedBox
+                                .shrink(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      screenWidth > 800 ? SocialIconButtons() : SizedBox
+                          .shrink(),
+
+
                     ],
                   ),
-                ),
-              ),
-            ),
+                )
 
-            Positioned(
-              left: 600,
-              top: 60,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  SlideTransition(
-                    position: _leftSlide,
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: Text("Hi, I’m Umar Gulzar", style: TextStyle(
-                        color: Colors.black87,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),),
-                    ),
-                  ),
-                  SlideTransition(
-                    position: _leftSlide,
-                    child: FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: Text("Flutter Developer", style: TextStyle(fontSize: 22,
-                        color: Colors.teal,
-                        fontWeight: FontWeight.w600,
-                      ),),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "I’m, a Flutter developer who loves creating modern and responsive mobile apps. "
-                          "I enjoy turning ideas into beautiful apps\nusing Flutter and Dart."
-                          "I work with tools like Firebase, REST APIs, and Riverpod to build real-world apps. "
-                          "Right now, \nI'm learning Flutter Backend and also improving my UI/UX skills.\n\n"
-                          "I'm always excited to learn new things and build apps that people love to use.",
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
-                      textAlign: TextAlign.justify,
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  ScaleTransition(
-                    scale: _scaleButton,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            elevation: 6,
-                            // shadowColor: Colors.white10,
-                            backgroundColor: Colors.teal[300],
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10))
-                            )),
-                        onPressed: () {
-                          setState(() {
-                            scrollToSection(CONTACT_KEY);
-                          });
-                        },
-                        child: Text(
-                          "Contact", style: TextStyle(color: Colors.black),)),
-                  ),
-                  const SizedBox(height: 30),
-                  SocialIconButtons(),
-
-
-                ],
-              ),
-            )
-
-          ],
+              ],
+            );
+          }
         ),
       ),
     );

@@ -188,10 +188,13 @@ class SkillsSectionState extends ConsumerState<SkillsSection>
                                                     fontSize: (con.maxWidth*0.05).clamp(25,45),
                                                     fontWeight: FontWeight.w400),
                                               ),
-                                              Text(
-                                                list[index]['subtitle']!,
-                                                style: TextStyle(
-                                                  color: Colors.white54, fontSize: (con.maxWidth*0.04).clamp(20,30),),
+                                              Flexible(
+                                                child: Text(
+                                                  list[index]['subtitle']!,
+                                                  style: TextStyle(
+                                                    color: Colors.white54,
+                                                    fontSize: (con.maxWidth*0.04).clamp(16,30),),
+                                                ),
                                               ),
                                             ],
                                           ),
